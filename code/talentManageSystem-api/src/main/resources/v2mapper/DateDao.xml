@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ucl.group.excelSystem.api.db.dao.DateDao">
+
+    <!-- 基本的ResultMap -->
+    <resultMap id="DateResultMap" type="ucl.group.excelSystem.api.db.pojo.BasicDateEntity">
+        <id property="dateId" column="date_id"/>
+        <result property="monthId" column="month_id"/>
+        <result property="name" column="name"/>
+        <result property="monthDate" column="month_date"/>
+    </resultMap>
+
+    <!-- 查询语句 -->
+    <select id="searchByMonthId" resultMap="DateResultMap" >
+        SELECT
+        month_id,
+        name,
+        month_date
+        FROM basic_v2_date
+        WHERE
+        month_id = #{monthId}
+    </select>
+    <insert id="add" parameterType="ucl.group.excelSystem.api.db.pojo.BasicDateEntity" keyProperty="dateId" useGeneratedKeys="true">
+        INSERT INTO basic_v2_date (
+        <if test="name != null">name,</if>
+        month_date,
+        <if test="dateId != null">date_id,</if>
+        <if test="monthId != null">month_id</if>
+        ) VALUES (
+        <if test="name != null">#{name},</if>
+        #{monthDate},
+        <if test="dateId != null">#{dateId},</if>
+        <if test="monthId != null">#{monthId}</if>
+
+        )
+    </insert>
+
+    <select id="searchById" parameterType="Long" resultMap="DateResultMap">
+        SELECT
+        date_id,
+        month_id,
+        name,
+        month_date,
+        FROM basic_v2_date
+        WHERE `date_id` =#{dateId}
+    </select>
+    <delete id="removeByMonthId" parameterType="Long">
+        delete  from basic_v2_date
+        WHERE `month_id` = #{monthId}
+    </delete>
+
+</mapper>
